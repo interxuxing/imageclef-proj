@@ -91,10 +91,10 @@ if exist('SCO','var')
     %%% Compute the average precision for sample %%%
     GTPOS = find(GTMAT(sidx,nte));
     N = size(GTPOS,1);
-    if N == 0
-        AP(nte,1) = 0;
-        continue;
-    end
+%     if N == 0
+%         AP(nte,1) = 0;
+%         continue;
+%     end
     nPREC = [1:N]'./GTPOS;
     AP(nte,1) = mean(nPREC);
   end

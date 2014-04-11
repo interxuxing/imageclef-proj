@@ -23,12 +23,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+<<<<<<< HEAD
       <file leaf-file-name="wordnet_word_sim.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="353" column="49" selection-start="12137" selection-end="12137" vertical-scroll-proportion="0.76237625" vertical-offset="5995" max-vertical-offset="6500">
+=======
+      <file leaf-file-name="generate_tag_matrix.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+          <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state line="120" column="18" selection-start="3953" selection-end="3953" vertical-scroll-proportion="0.0" vertical-offset="1753" max-vertical-offset="2720">
+=======
+<<<<<<< HEAD
+            <state line="82" column="16" selection-start="2513" selection-end="2513" vertical-scroll-proportion="0.025974026" vertical-offset="1624" max-vertical-offset="2720">
+              <folding />
+=======
+            <state line="108" column="0" selection-start="3477" selection-end="3477" vertical-scroll-proportion="0.0" vertical-offset="1754" max-vertical-offset="2720">
+>>>>>>> d9aec8dad0e4316367f55e8f871c37f196c8069c
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wordnet_word_sim.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="0" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6520">
+>>>>>>> 8ac0ad26127aa9b5cdc5bfea9573f8b400e15960
               <folding>
                 <element signature="e#2274#3129#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="check_debug.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/check_debug.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="151" column="37" selection-start="5012" selection-end="5012" vertical-scroll-proportion="0.23497267" vertical-offset="2934" max-vertical-offset="3300">
+              <folding>
+                <element signature="e#90#104#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -45,6 +80,7 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/wordnet_word_sim.py" />
+        <option value="$PROJECT_DIR$/check_debug.py" />
       </list>
     </option>
   </component>
@@ -111,7 +147,31 @@
       <console-settings />
     </option>
   </component>
+<<<<<<< HEAD
   <component name="RunManager" selected="Python.wordnet_word_sim">
+=======
+  <component name="RunManager" selected="Python.check_debug">
+    <configuration default="false" name="generate_tag_matrix" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="utils" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generate_tag_matrix.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+>>>>>>> 8ac0ad26127aa9b5cdc5bfea9573f8b400e15960
     <configuration default="false" name="wordnet_word_sim" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -125,6 +185,24 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="utils" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wordnet_word_sim.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="check_debug" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="utils" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/check_debug.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PyDebugRunner" />
@@ -251,12 +329,25 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
+<<<<<<< HEAD
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="Python.wordnet_word_sim" />
     </list>
     <recent_temporary>
       <list size="1">
         <item index="0" class="java.lang.String" itemvalue="Python.wordnet_word_sim" />
+=======
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Python.generate_tag_matrix" />
+      <item index="1" class="java.lang.String" itemvalue="Python.wordnet_word_sim" />
+      <item index="2" class="java.lang.String" itemvalue="Python.check_debug" />
+    </list>
+    <recent_temporary>
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.check_debug" />
+        <item index="1" class="java.lang.String" itemvalue="Python.wordnet_word_sim" />
+        <item index="2" class="java.lang.String" itemvalue="Python.generate_tag_matrix" />
+>>>>>>> 8ac0ad26127aa9b5cdc5bfea9573f8b400e15960
       </list>
     </recent_temporary>
   </component>
@@ -286,6 +377,21 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
+=======
+=======
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39795917" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28717202" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+>>>>>>> 16d218c87a2b6a748e83f8798e6275a6f4982846
+>>>>>>> 8ac0ad26127aa9b5cdc5bfea9573f8b400e15960
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -313,7 +419,18 @@
           <line>353</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/check_debug.py</url>
+          <line>141</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/check_debug.py</url>
+          <line>156</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
       </breakpoints>
+<<<<<<< HEAD
       <option name="time" value="3" />
     </breakpoint-manager>
   </component>
@@ -323,6 +440,120 @@
         <state line="353" column="49" selection-start="12137" selection-end="12137" vertical-scroll-proportion="0.76237625" vertical-offset="5995" max-vertical-offset="6500">
           <folding>
             <element signature="e#2274#3129#0" expanded="false" />
+=======
+      <option name="time" value="37" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state line="96" column="0" selection-start="2878" selection-end="2878" vertical-scroll-proportion="0.0" vertical-offset="1920" max-vertical-offset="2040">
+=======
+        <state line="71" column="14" selection-start="2228" selection-end="2234" vertical-scroll-proportion="0.0" vertical-offset="1800" max-vertical-offset="2720">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="45" selection-start="3094" selection-end="3094" vertical-scroll-proportion="0.0" vertical-offset="1977" max-vertical-offset="2400">
+          <folding>
+            <element signature="e#128#165#0" expanded="true" />
+            <element signature="e#2165#3020#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="129" column="0" selection-start="4185" selection-end="4185" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2720">
+>>>>>>> 16d218c87a2b6a748e83f8798e6275a6f4982846
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state line="1144" column="0" selection-start="47625" selection-end="47625" vertical-scroll-proportion="0.0" vertical-offset="22880" max-vertical-offset="30800">
+=======
+        <state line="1241" column="27" selection-start="50930" selection-end="50930" vertical-scroll-proportion="0.0" vertical-offset="24820" max-vertical-offset="29500">
+>>>>>>> 16d218c87a2b6a748e83f8798e6275a6f4982846
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="13" selection-start="1202" selection-end="1202" vertical-scroll-proportion="0.0" vertical-offset="745" max-vertical-offset="2220">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1144" column="0" selection-start="47625" selection-end="47625" vertical-scroll-proportion="0.0" vertical-offset="22880" max-vertical-offset="30800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="44" selection-start="1901" selection-end="1901" vertical-scroll-proportion="0.0" vertical-offset="1115" max-vertical-offset="2040">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1144" column="0" selection-start="47625" selection-end="47625" vertical-scroll-proportion="0.0" vertical-offset="22880" max-vertical-offset="30800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state line="1144" column="0" selection-start="47625" selection-end="47625" vertical-scroll-proportion="-2.1558871" vertical-offset="22880" max-vertical-offset="29500">
+=======
+        <state line="1241" column="27" selection-start="50930" selection-end="50930" vertical-scroll-proportion="-1.978691" vertical-offset="24820" max-vertical-offset="29500">
+>>>>>>> 16d218c87a2b6a748e83f8798e6275a6f4982846
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0" vertical-offset="5000" max-vertical-offset="6520">
+          <folding>
+            <element signature="e#128#165#0" expanded="true" />
+            <element signature="e#2165#3020#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_tag_matrix.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state line="120" column="18" selection-start="3953" selection-end="3953" vertical-scroll-proportion="0.0" vertical-offset="1753" max-vertical-offset="2720">
+=======
+<<<<<<< HEAD
+        <state line="82" column="16" selection-start="2513" selection-end="2513" vertical-scroll-proportion="0.025974026" vertical-offset="1624" max-vertical-offset="2720">
+=======
+        <state line="108" column="0" selection-start="3477" selection-end="3477" vertical-scroll-proportion="0.0" vertical-offset="1754" max-vertical-offset="2720">
+>>>>>>> 16d218c87a2b6a748e83f8798e6275a6f4982846
+>>>>>>> d9aec8dad0e4316367f55e8f871c37f196c8069c
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/check_debug.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="151" column="37" selection-start="5012" selection-end="5012" vertical-scroll-proportion="0.23497267" vertical-offset="2934" max-vertical-offset="3300">
+          <folding>
+            <element signature="e#90#104#0" expanded="true" />
+>>>>>>> 8ac0ad26127aa9b5cdc5bfea9573f8b400e15960
           </folding>
         </state>
       </provider>
