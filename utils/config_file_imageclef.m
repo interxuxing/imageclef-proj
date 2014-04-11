@@ -1,12 +1,28 @@
 %%% Global configuration file %%%%
 
-%% Path for laptop
-ROOT_DIR = 'C:\workspace\my tools\git code\imageclef-proj';
-SRC_DATA_DIR = 'C:\workspace\my tools\git code\imageclef-proj\data';
-UTILS_DIR = 'C:\workspace\my tools\git code\imageclef-proj\utils';
+Evn = 'desktop'; % desktop or laptop
 
-DST_FEA_DIR = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data';
+if strcmp(Evn, 'laptop')
+    % Path for laptop
+    ROOT_DIR = 'C:\workspace\my tools\git code\imageclef-proj';
+    SRC_DATA_DIR = 'C:\workspace\my tools\git code\imageclef-proj\data';
+    UTILS_DIR = 'C:\workspace\my tools\git code\imageclef-proj\utils';
+
+    DST_FEA_DIR = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data';
+elseif strcmp(Evn, 'desktop')
+    % Path for laptop
+    ROOT_DIR = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef-proj';
+    SRC_DATA_DIR = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef-proj\data';
+    UTILS_DIR = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef-proj\utils';
+
+    DST_FEA_DIR = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef2014data';
+else
+    error('Evn type error, only laptop or desktop is allowed!');
+end
 %% Path for desktop
+
+
+
 
 
 %% visual feature files for Dev
