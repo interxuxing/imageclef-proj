@@ -26,7 +26,7 @@
       <file leaf-file-name="wordnet_word_sim.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="208" column="45" selection-start="6711" selection-end="6711" vertical-scroll-proportion="-0.55598456" vertical-offset="3808" max-vertical-offset="7500">
+            <state line="247" column="70" selection-start="8375" selection-end="8375" vertical-scroll-proportion="0.3257329" vertical-offset="4100" max-vertical-offset="7500">
               <folding>
                 <element signature="e#128#165#0" expanded="true" />
                 <element signature="e#2749#3604#0" expanded="false" />
@@ -39,9 +39,7 @@
         <entry file="file://$PROJECT_DIR$/check_debug.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="178" column="99" selection-start="6073" selection-end="6073" vertical-scroll-proportion="0.0" vertical-offset="3388" max-vertical-offset="4000">
-              <folding>
-                <element signature="e#105#119#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,10 +60,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="32" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="1" />
+    <option name="y" value="41" />
+    <option name="width" value="1598" />
+    <option name="height" value="858" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -118,6 +116,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -305,7 +308,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="32" width="1936" height="1056" extended-state="7" />
+    <frame x="1" y="41" width="1598" height="858" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -313,7 +316,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20833333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38521835" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38483146" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27771556" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -323,8 +326,8 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -373,25 +376,33 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/check_debug.py">
+    <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="178" column="99" selection-start="6073" selection-end="6073" vertical-scroll-proportion="0.0" vertical-offset="3388" max-vertical-offset="4000">
+        <state line="208" column="45" selection-start="6711" selection-end="6711" vertical-scroll-proportion="0.0" vertical-offset="4100" max-vertical-offset="7500">
           <folding>
-            <element signature="e#105#119#0" expanded="true" />
+            <element signature="e#128#165#0" expanded="true" />
+            <element signature="e#2749#3604#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/WinPython-32bit-2.7.5.3/python-2.7.5/Lib/site-packages/nltk/corpus/reader/wordnet.py">
+    <entry file="file://$PROJECT_DIR$/check_debug.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="635" column="30" selection-start="23010" selection-end="23022" vertical-scroll-proportion="0.47920132" vertical-offset="12252" max-vertical-offset="35560">
+        <state line="178" column="99" selection-start="6073" selection-end="6073" vertical-scroll-proportion="0.0" vertical-offset="3388" max-vertical-offset="4000">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/check_debug.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="178" column="99" selection-start="6073" selection-end="6073" vertical-scroll-proportion="0.0" vertical-offset="3388" max-vertical-offset="4000">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="45" selection-start="6711" selection-end="6711" vertical-scroll-proportion="-0.55598456" vertical-offset="3808" max-vertical-offset="7500">
+        <state line="247" column="70" selection-start="8375" selection-end="8375" vertical-scroll-proportion="0.3257329" vertical-offset="4100" max-vertical-offset="7500">
           <folding>
             <element signature="e#128#165#0" expanded="true" />
             <element signature="e#2749#3604#0" expanded="false" />
