@@ -13,12 +13,12 @@ import math
 # give some initial configuration
 ENV = 1 # 1:laptop  2:desktop
 
-if ENV == 1:
+if ENV == 2:
     SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
     DST_DATA_DIR = SRC_DATA_DIR
 else:
-    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
-    DST_DATA_DIR = SRC_DATA_DIR
+    SRC_DATA_DIR = 'D:\\workspace-limu\\image-annotation\\datasets\\imageclef2014\\imageclef-proj\\data\\'
+    DST_DATA_DIR = 'D:\\workspace-limu\\cloud disk\\Dropbox\\limu\\submission\\ImageCLEF2014\\'
 
 
 # define a structure of each image entry
@@ -47,7 +47,7 @@ def parse_overfeat_result(res_file):
 
     DevImgs = []
     fid = open(res_file, 'r')
-    STEP = 6 # each image 6 level tags
+    STEP = 10 # each image 6 level tags
     count = 0 # count the level of each image
     isNewImage = True
     for line in fid.readlines():
@@ -71,6 +71,7 @@ def parse_overfeat_result(res_file):
             count = 0
             DevImgs.append(newImg)
 
+    fid.close()
     return DevImgs
 
 def split_tags(old_tags):
@@ -113,7 +114,6 @@ def parse_imageclef_concepts_wn(res_file):
             # concept	type	sense	wn_offset(3.0)
         and return a big list contains four sub list 'concept (str)', 'type (str)', 'sense (int)', 'wn_offset (str)'
     """
-    concepts = []
     concept_tag = []
     concept_type = []
     concept_sense = []
@@ -135,6 +135,7 @@ def parse_imageclef_concepts_wn(res_file):
     # ??? how to check?
 
     concepts = [concept_tag, concept_type, concept_sense, concept_wn_offset]
+    fid.close()
     return concepts
 
 def parse_imageclef_conceptlists(res_file):
@@ -340,14 +341,14 @@ if __name__ == '__main__':
         eachImg.imgmaptags.update(image_maptags)
         count += 1
 
-        if 0 == math.fmod(count, 100):
-            print '...finished %d-th image, mapping tag from overfeat to imageclef ...' % count
+        # if 0 == math.fmod(count, 100):
+        print '...finished %d-th image, mapping tag from overfeat to imageclef ...' % count
 
     # read Image_conceptlists in devel_conceptlists.txt file
     Image_conceptlists = parse_imageclef_conceptlists(SRC_DATA_DIR + 'devel_conceptlists.txt')
 
     # now generate the final predict result
-    generate_predict_results(DevImgs, Image_conceptlists, (SRC_DATA_DIR + 'devel_predict_results.txt'))
+    generate_predict_results(DevImgs, Image_conceptlists, (DST_DATA_DIR + 'devel_predict_results.txt'))
 
 
     print 'finished predict tags for dev set -:)'
