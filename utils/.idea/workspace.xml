@@ -26,7 +26,7 @@
       <file leaf-file-name="wordnet_word_sim.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="184" column="24" selection-start="5609" selection-end="5609" vertical-scroll-proportion="-0.3243243" vertical-offset="3208" max-vertical-offset="7500">
+            <state line="208" column="45" selection-start="6711" selection-end="6711" vertical-scroll-proportion="-0.55598456" vertical-offset="3808" max-vertical-offset="7500">
               <folding>
                 <element signature="e#128#165#0" expanded="true" />
                 <element signature="e#2749#3604#0" expanded="false" />
@@ -305,7 +305,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="32" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="32" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -391,7 +391,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wordnet_word_sim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="184" column="24" selection-start="5609" selection-end="5609" vertical-scroll-proportion="-0.3243243" vertical-offset="3208" max-vertical-offset="7500">
+        <state line="208" column="45" selection-start="6711" selection-end="6711" vertical-scroll-proportion="-0.55598456" vertical-offset="3808" max-vertical-offset="7500">
           <folding>
             <element signature="e#128#165#0" expanded="true" />
             <element signature="e#2749#3604#0" expanded="false" />
