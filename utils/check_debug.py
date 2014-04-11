@@ -1,3 +1,4 @@
+# coding=utf-8
 __author__ = 'xuxing'
 
 """
@@ -6,13 +7,27 @@ __author__ = 'xuxing'
 
 import cPickle
 import numpy as np
+from operator import itemgetter
 
+# first give some initial configuration about path, etc
+# give some initial configuration
+ENV = 1 # 1:laptop  2:desktop
+
+if ENV == 2:
+    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
+    DST_DATA_DIR = SRC_DATA_DIR
+else:
+    SRC_DATA_DIR = 'D:\\workspace-limu\\image-annotation\\datasets\\imageclef2014\\imageclef-proj\\data\\'
+    DST_DATA_DIR = 'D:\\workspace-limu\\cloud disk\\Dropbox\\limu\\submission\\ImageCLEF2014\\'
 
 class ImgEntry:
     def __init__(self):
         self.imgname = ''
         self.imgtags = {} # dict, predict tag with score, tags in overfeat
         self.imgmaptags = {} # dict, mapped tags with score, tags in imageclef
+
+def sort_dict(d, reverse=False):
+    return sorted(d.iteritems(), key=itemgetter(1), reverse=True)
 
 
 def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_filename):
@@ -128,21 +143,41 @@ def generate_imageclef_evalfiles(in_dict_file, in_ImgEntries, \
     fid_score.close()
 
 
+def generate_mapped_imageclef(in_ImgEntries, out_mapped_file):
+    """
+        function generate_mapped_imageclef is to generate a file similar as 'overfeat_predict_results.txt',
+            whereas the tags are mapped in Imageclef, rather than Imagenet
 
+        Input:
+            in_ImgEntries, ImgEntry objects
+            out_mapped_file, filename of mapped tag file
+    """
 
+    fid = open(out_mapped_file, 'w')
 
+    for entry in in_ImgEntries:
+        mapped_tags = entry.imgmaptags
+        imgname = entry.imgname
 
+        fid.write(imgname + '\n')
+        sorted_mapped_tags = sort_dict(mapped_tags)
+
+        for item in sorted_mapped_tags:
+            if item[1] > 0:
+                fid.write(('%s %f\n' % (item[0], item[1])))
+
+    fid.close()
 
 if __name__ == '__main__':
-    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
-    DST_DATA_DIR = SRC_DATA_DIR
-
 
     f = open(SRC_DATA_DIR + 'temp.data')
     obj = cPickle.load(f)
 
     ImgEntries = obj[0]
     Clef_conceptslist = obj[1]
+
+    # generate a file similar as 'overfeat_predict_results.txt', whereas the tags are mapped in Imageclef, rather than Imagenet
+    generate_mapped_imageclef(ImgEntries, (SRC_DATA_DIR + 'clef_mapped_results.txt'))
 
     # generate the predict results
     # generate_predict_results(ImgEntries, Clef_conceptslist, (DST_DATA_DIR+'devel_predict_results.txt'))

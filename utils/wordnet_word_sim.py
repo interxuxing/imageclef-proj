@@ -8,6 +8,7 @@ __author__ = 'xuxing'
 from nltk.corpus import wordnet as wn
 import numpy as np
 import math
+import sys
 
 # first give some initial configuration about path, etc
 # give some initial configuration
@@ -19,7 +20,13 @@ if ENV == 2:
 else:
     SRC_DATA_DIR = 'D:\\workspace-limu\\image-annotation\\datasets\\imageclef2014\\imageclef-proj\\data\\'
     DST_DATA_DIR = 'D:\\workspace-limu\\cloud disk\\Dropbox\\limu\\submission\\ImageCLEF2014\\'
+    WORDNET_IC_DIR = 'C:\\Users\\LIMU\\AppData\\Roaming\\nltk_data\\corpora\\wordnet_ic\\'
 
+SIMILARITY_MEASURE = ['path_similarity', 'lch_similarity', 'wup_similarity', \
+                      'res_similarity', 'jcn_similarity', 'lin_similarity']
+
+from nltk.corpus import wordnet_ic
+ic = wordnet_ic.ic(WORDNET_IC_DIR+'ic-brown.dat')
 
 # define a structure of each image entry
 class ImgEntry:
@@ -27,6 +34,10 @@ class ImgEntry:
         self.imgname = ''
         self.imgtags = {} # dict, predict tag with score, tags in overfeat
         self.imgmaptags = {} # dict, mapped tags with score, tags in imageclef
+
+from operator import itemgetter
+def sort_dict(d, reverse=False):
+    return sorted(d.iteritems(), key=itemgetter(1), reverse=True)
 
 def parse_overfeat_result(res_file):
     """
@@ -171,7 +182,7 @@ def parse_imageclef_conceptlists(res_file):
     return image_conceptlists
 
 
-def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef):
+def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0):
     """
         function map_tag_overfeat2imageclef is to calculate the similarity scores between tag predicted by Overfeat,
             and concepts in Imageclef,
@@ -180,10 +191,12 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef):
         Input:
             tag_overfeat is a dictionayr {tag:score}
             concepts_imageclef is a big list contains 4 sub lists from function parse_imageclef_concepts_wn
-
+            mapping_type is an int index 0,1,2 denotes the type of similarity measure, contains 'path_similarity', 'lch_similarity',
+                        wup_similarity
         Return:
             function return a dictionary {tag:score} as the final prediction for one image
     """
+
     # initial returned mapped dictionary
     map_dict = {}
 
@@ -218,7 +231,7 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef):
             synsets_new_tag = wn.synsets(new_tag)
             syn_new_tag = synsets_new_tag[new_tag_sense]
             # calculate path similarity
-            path_sim = syn_old_tag.path_similarity(syn_new_tag)
+            path_sim = synsets_similarity(syn_old_tag, syn_new_tag, mapping_type)
             if path_sim is None:
                 path_sim = 0
             sim_score[idx_old_tag][idx_new_tag] = float(old_tag_score) * path_sim
@@ -258,7 +271,34 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef):
 
     return map_dict
 
+def synsets_similarity(synset1, synset2, mapping_type):
+    """
+        synsets_similarity is a sub function to calculate similarity between 2 synsets using different mapping type
+    """
 
+    simi = 0
+    try:
+        if 0 == mapping_type:
+            simi = synset1.path_similarity(synset2)
+        elif 1 == mapping_type:
+            simi = synset1.lch_similarity(synset2)
+        elif 2 == mapping_type:
+            simi = synset1.wup_similarity(synset2)
+        elif 3 == mapping_type:
+            simi = synset1.res_similarity(synset2, ic)
+        elif 4 == mapping_type:
+            simi = synset1.jcn_similarity(synset2, ic)
+        elif 5 == mapping_type:
+            simi = synset1.lin_similarity(synset2, ic)
+        else:
+            print 'error mapping_type, it should be an integer 0,1,2'
+            return -1
+    except Exception, e:
+        simi = 0
+
+    if simi is None:
+        simi = 0
+    return simi
 
 def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_filename):
     """
@@ -334,9 +374,17 @@ if __name__ == '__main__':
 
     # map the overfeat tags to imageclef tags
     count = 0
+    mapping_type = [0,1,2,3,4,5]
     for eachImg in DevImgs:
         tag_overfeat = eachImg.imgtags
-        image_maptags = map_tag_overfeat2imageclef(tag_overfeat, Imageclef_concepts)
+
+        for item in mapping_type:
+            image_maptags = map_tag_overfeat2imageclef(tag_overfeat, Imageclef_concepts, item)
+            print 'for image %s, using measure %s' % (eachImg.imgname, SIMILARITY_MEASURE[item])
+            sorted_maptags = sort_dict(image_maptags)
+            for eachitem in sorted_maptags:
+                print str(eachitem),
+
 
         eachImg.imgmaptags.update(image_maptags)
         count += 1
