@@ -3,17 +3,25 @@ function imageclef_merge_images()
 % single directory
 
 
-src_dir = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef2014data\dev\devimages';
-merge_dirname = 'devall';
+% src_dir = 'D:\workspace-limu\image-annotation\datasets\imageclef2014\imageclef2014data\dev\devimages';
 
-if ~exist(fullfile(src_dir, merge_dirname), 'dir')
-    mkdir(fullfile(src_dir, merge_dirname));
+%% for dev set in laptop
+src_dir = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data\dev\webupv14_devel_visual_images\WEBUPV\images'
+dst_dir = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data\dev'
+merge_dirname = 'devall'
+%% for test set in laptop
+% src_dir = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data\test\webupv14_test_visual_images\WEBUPV\images'
+% dst_dir = 'C:\workspace\program\image-annotation\benchmark-dataset\Imageclef2014\imageclef2014data\test'
+% merge_dirname = 'testall';
+
+if ~exist(fullfile(dst_dir, merge_dirname), 'dir')
+    mkdir(fullfile(dst_dir, merge_dirname));
 end
     
 imgNum = 0;
 dirInfor = dir(src_dir);
 
-for d = 3 : length(dirInfor)
+for d = 1 : length(dirInfor)
     if ~dirInfor(d).isdir
         continue;
     else
@@ -30,7 +38,7 @@ for d = 3 : length(dirInfor)
                 jpgfilename = fileInfor(f).name;
                 % move jpg file to merge dir
                 try
-                    movefile(fullfile(src_dir, subdir, jpgfilename), fullfile(src_dir, merge_dirname));
+                    movefile(fullfile(src_dir, subdir, jpgfilename), fullfile(dst_dir, merge_dirname));
                 catch
                     error('meet error');
                 end
