@@ -12,19 +12,7 @@ __author__ = 'LIMU'
 
 
 import numpy as np
-
-
-# first give some initial configuration about path, etc
-# give some initial configuration
-ENV = 1 # 1:laptop  2:desktop
-
-if ENV == 1:
-    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
-    DST_DATA_DIR = SRC_DATA_DIR
-else:
-    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
-    DST_DATA_DIR = SRC_DATA_DIR
-
+import imageclef_settings as settings
 
 
 # define a structure of each image entry
@@ -46,7 +34,7 @@ if __name__ == '__main__':
     Dict = []
 
     # first read all unique tags from 'dev_dict.txt' file
-    fid = open(SRC_DATA_DIR + dev_dicfile)
+    fid = open(settings.SRC_DATA_DIR + dev_dicfile)
     allinfo = fid.readlines()
     num_tag = len(allinfo)
     for line in allinfo:
@@ -56,8 +44,8 @@ if __name__ == '__main__':
     fid.close()
 
     # loop to read each line in dev_gtfile and dev_conceptlistsfile
-    fid = open(SRC_DATA_DIR + dev_gtfile)
-    fid2 = open(SRC_DATA_DIR + dev_conceptlistsfile)
+    fid = open(settings.SRC_DATA_DIR + dev_gtfile)
+    fid2 = open(settings.SRC_DATA_DIR + dev_conceptlistsfile)
     allinfo = fid.readlines()
     allinfo2 = fid2.readlines()
 
@@ -89,9 +77,9 @@ if __name__ == '__main__':
     dev_imglistfile = 'devel_imglist.txt'
     dev_tagmaskfile = 'devel_tagmask.txt'
 
-    fid_tagmatrix = open(DST_DATA_DIR+dev_tagmatrixfile, 'w')
-    fid_imglistfile = open(DST_DATA_DIR+dev_imglistfile, 'w')
-    fid_tagmask = open(DST_DATA_DIR+dev_tagmaskfile, 'w')
+    fid_tagmatrix = open(settings.DST_DATA_DIR+dev_tagmatrixfile, 'w')
+    fid_imglistfile = open(settings.DST_DATA_DIR+dev_imglistfile, 'w')
+    fid_tagmask = open(settings.DST_DATA_DIR+dev_tagmaskfile, 'w')
 
     # new a tag and tag mask matrix with size num_img x num_tag
     tagmatrix = np.zeros((num_img, num_tag))

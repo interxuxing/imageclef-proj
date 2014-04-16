@@ -7,26 +7,26 @@ __author__ = 'xuxing'
 
 from nltk.corpus import wordnet as wn
 import numpy as np
-import math
-import sys
+import re
+
+import imageclef_settings as settings
+
 
 # first give some initial configuration about path, etc
 # give some initial configuration
-ENV = 1 # 1:laptop  2:desktop
-
-if ENV == 2:
-    SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
-    DST_DATA_DIR = SRC_DATA_DIR
-else:
-    SRC_DATA_DIR = 'D:\\workspace-limu\\image-annotation\\datasets\\imageclef2014\\imageclef-proj\\data\\'
-    DST_DATA_DIR = 'D:\\workspace-limu\\cloud disk\\Dropbox\\limu\\submission\\ImageCLEF2014\\'
-    WORDNET_IC_DIR = 'C:\\Users\\LIMU\\AppData\\Roaming\\nltk_data\\corpora\\wordnet_ic\\'
-
-SIMILARITY_MEASURE = ['path_similarity', 'lch_similarity', 'wup_similarity', \
-                      'res_similarity', 'jcn_similarity', 'lin_similarity']
+# ENV = 1 # 1:laptop  2:desktop
+#
+# if ENV == 1:
+#     SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
+#     DST_DATA_DIR = SRC_DATA_DIR
+#     WORDNET_IC_DIR = 'C:\\Users\\xuxing\\AppData\\Roaming\\nltk_data\\corpora\\wordnet_ic\\'
+# else:
+#     SRC_DATA_DIR = 'D:\\workspace-limu\\image-annotation\\datasets\\imageclef2014\\imageclef-proj\\data\\'
+#     DST_DATA_DIR = 'D:\\workspace-limu\\cloud disk\\Dropbox\\limu\\submission\\ImageCLEF2014\\'
+#     WORDNET_IC_DIR = 'C:\\Users\\LIMU\\AppData\\Roaming\\nltk_data\\corpora\\wordnet_ic\\'
 
 from nltk.corpus import wordnet_ic
-ic = wordnet_ic.ic(WORDNET_IC_DIR+'ic-brown.dat')
+ic = wordnet_ic.ic(settings.WORDNET_IC_DIR+'ic-brown.dat')
 
 # define a structure of each image entry
 class ImgEntry:
@@ -37,9 +37,39 @@ class ImgEntry:
 
 from operator import itemgetter
 def sort_dict(d, reverse=False):
+    # sort the dict based on values, for descending order
     return sorted(d.iteritems(), key=itemgetter(1), reverse=True)
 
-def parse_overfeat_result(res_file):
+
+def select_topK_dict(in_dict, K):
+    """
+        function select_topK_dict is to select the top K entries (with values) in in_dict
+
+        Input:
+            in_dict: a dict
+            K: an int number < 10
+
+        Return:
+            out_dict: a dict with topK entries in in_dict
+    """
+
+    sorted_list = sort_dict(in_dict, reverse=True) # descending order
+    num1 = len(sorted_list)
+
+    if num1 < K:
+        print 'number of entries in in_dict should larger than %d, not it is %d' % (K, num1)
+        return None
+
+    out_dict = {}
+    # now fill the topK entries with values to out_dict
+    for item in sorted_list:
+        key = item[0]
+        value = item[1]
+        out_dict[key] = value
+
+    return out_dict
+
+def parse_overfeat_result(res_file, step=10):
     """
         parse_overfeat_result(res_file) is a function to parse the output tag results from overfeat lib
 
@@ -58,7 +88,7 @@ def parse_overfeat_result(res_file):
 
     DevImgs = []
     fid = open(res_file, 'r')
-    STEP = 10 # each image 6 level tags
+    STEP = step # each image 6 level tags
     count = 0 # count the level of each image
     isNewImage = True
     for line in fid.readlines():
@@ -72,7 +102,7 @@ def parse_overfeat_result(res_file):
         else:
             count += 1
             tags = line.strip('\n')
-            d = split_tags(tags)
+            d = split_tags_overfeat(tags)
             newImg.imgtags.update(d)
 
         # if get end line (6-th line) for each image
@@ -85,7 +115,7 @@ def parse_overfeat_result(res_file):
     fid.close()
     return DevImgs
 
-def split_tags(old_tags):
+def split_tags_overfeat(old_tags):
     """
         function split_tags is to split the tag format in overfeat outputfile
             to get (tag, socre) format
@@ -118,6 +148,117 @@ def split_tags(old_tags):
     d = {k:v for k, v in zip(taglist, scorelist)}
 
     return d
+
+
+def parse_clarifai_result(res_file, step=10):
+    """
+        parse_clarifai_result(res_file) is a function to parse the output tag results from clarifai
+
+        in the res_file, for each image, it is formatted as:
+        line1: imagename
+        line2: tag(score1%)
+        line3: tag(score2%)
+        line4: tag(score3%)
+        line5: tag(score4%)
+        line6: tag(score5%)
+        line7: tag(score6%)
+        line8: tag(score7%)
+        line9: tag(score8%)
+        line10: tag(score9%)
+        line11: tag(score10%)
+        Return:
+            A list contains entries, each entry is a ImgEntry object
+    """
+
+    DevImgs = []
+    fid = open(res_file, 'r')
+    STEP = 10 # each image 6 level tags
+    count = 0 # count the level of each image
+    line_count = 0
+    isNewImage = True
+    for line in fid.readlines():
+        # the first 2 bytes in 1st line of 'clarifai_predict_results.txt' need to be removed!
+        line_count += 1
+        if line_count == 1:
+            line = line[3:]
+
+        if isNewImage:
+            # create a new image instance
+            newImg = ImgEntry()
+            # read 1st line image name
+            newImg.imgname = line.strip('\n')
+
+            isNewImage = False
+        else:
+            count += 1
+            tags = line.strip('\n')
+            d = split_tags_clarifai(tags)
+            newImg.imgtags.update(d)
+
+        # if get end line (6-th line) for each image
+        # reset the flags
+        if count == STEP:
+            isNewImage = True
+            count = 0
+            DevImgs.append(newImg)
+
+    fid.close()
+    return DevImgs
+
+def split_tags_clarifai(old_tags):
+    """
+        function split_tags is to split the tag format in overfeat outputfile
+            to get (tag, socre) format
+
+        input old_tags is a string
+        return a dict contains {tag:score}, only one instance
+    """
+    pattern = re.compile(r'(\w+)\((\d+.\d+)%\)')
+    p = pattern.findall(old_tags)
+
+    if len(p) != 1:
+        print 'no tag and score found in input %s, check the pattern again!' % old_tags
+        return -1
+
+    tag = p[0][0]
+    score = float(p[0][1]) / 100
+
+    d = {tag:score}
+    return d
+
+
+def generate_replicate_clarifai_ImgEntries(in_ImgEntries, in_Imglistfile):
+    """
+        function generate_replicate_clarifai_ImgEntries is to produce the replicated ImgEntries data as listed in dev_imglist.txt
+            file.
+        Since function parse_clarifai_result only produces unique ImgEntries, but we need replicated ones
+
+        Input:
+            in_ImgEntries is the unique ImgEntries
+            in_Imglistfile is the dev_imglist.txt file
+
+        Return:
+            replicated_ImgEntries, a list of replicated ImgEntries
+    """
+
+    unique_Imglist = []
+    replicate_Imglist = []
+    replicate_ImgEntries = []
+
+    fid_Imglist = open(in_Imglistfile, 'r')
+    for line in fid_Imglist.readlines():
+        replicate_Imglist.append(line.strip('\n'))
+
+    for entry in in_ImgEntries:
+        unique_Imglist.append(entry.imgname)
+
+    # now copy the unique ones to the relpicated oupputlist
+    for item in replicate_Imglist:
+        unique_idx = unique_Imglist.index(item)
+        replicate_ImgEntries.append(in_ImgEntries[unique_idx])
+
+    fid_Imglist.close()
+    return replicate_ImgEntries
 
 def parse_imageclef_concepts_wn(res_file):
     """
@@ -218,24 +359,29 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
         # we get the most synset for old_tag
         synsets_old_tag = wn.synsets(old_tag)
         if len(synsets_old_tag) == 0:
-            print ' now synsets retireved for Overfeat tag: ' + old_tag
-            return -1
+            print ' no synsets retireved for Clarifai tag: ' + old_tag
+            continue
 
         syn_old_tag = synsets_old_tag[0]
 
         # now calculate similarity score with concepts in Imageclef
         for idx_new_tag in range(len(concept_tag)):
             new_tag = concept_tag[idx_new_tag]
-            new_tag_sense = concept_sense[idx_new_tag] - 1 # keep index with list order
 
-            synsets_new_tag = wn.synsets(new_tag)
-            syn_new_tag = synsets_new_tag[new_tag_sense]
-            # calculate path similarity
-            path_sim = synsets_similarity(syn_old_tag, syn_new_tag, mapping_type)
-            if path_sim is None:
-                path_sim = 0
-            sim_score[idx_old_tag][idx_new_tag] = float(old_tag_score) * path_sim
+            if new_tag == old_tag: # if tag from clarifai is in Clef tag sets, set path_sim = 1
+                path_sim = 1
+                sim_score[idx_old_tag][idx_new_tag] = float(old_tag_score) * path_sim
+            else:
+                new_tag_sense = concept_sense[idx_new_tag] - 1 # keep index with list order
 
+                synsets_new_tag = wn.synsets(new_tag)
+                syn_new_tag = synsets_new_tag[new_tag_sense]
+                # calculate path similarity
+                path_sim = synsets_similarity(syn_old_tag, syn_new_tag, mapping_type)
+                if path_sim is None:
+                    path_sim = 0
+                sim_score[idx_old_tag][idx_new_tag] = float(old_tag_score) * path_sim
+                # sim_score[idx_old_tag][idx_new_tag] = path_sim
     # after we get the sim_score matrix, we sorted with descending order
     # numpy default sorted is ascending order
     mat = np.sort(sim_score, axis=1)   # axis=1 is column order, 0 is row order
@@ -257,9 +403,10 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
 
         if tag_imageclef in map_dict.keys():
             map_dict[tag_imageclef] += pred_sim_score[i]
+            # map_dict[tag_imageclef] += tag_overfeat.values()[i]
         else:
             map_dict[tag_imageclef] = pred_sim_score[i]
-
+            # map_dict[tag_imageclef] = tag_overfeat.values()[i]
     # process for sunrise and sunset tags, merge it in map_dict
     map_dict['sunrise/sunset'] = 0
     if 'sunrise' in map_dict.keys():
@@ -269,7 +416,11 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
         map_dict['sunset'] += map_dict['sunset']
         del map_dict['sunset']
 
-    return map_dict
+    if len(map_dict) == 0:
+        print '... ... no map_dict obtained for current image!'
+        return -1
+    else:
+        return map_dict
 
 def synsets_similarity(synset1, synset2, mapping_type):
     """
@@ -360,43 +511,48 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
     fid.close()
 
 
+def generate_unique_imglist(in_listfile, out_listfile):
+    """
+        function generate_unique_imglist generates the unique image ids to a file
+
+        Input:
+            in_listfile,  a txt file contains the replicate image ids
+            out_listfile, a txt file contains only unique image ids
+    """
+
+    fid_in = open(in_listfile, 'r')
+    fid_out = open(out_listfile, 'w')
+
+    # construct the replicate image list
+    list_img_replicate = []
+
+    for line in fid_in.readlines():
+        list_img_replicate.append(line.strip('\n'))
+
+    print 'there are %d instances in relicate image list %s' % (len(list_img_replicate), in_listfile)
+
+    list_img_unique = list(set(list_img_replicate))
+    for line in list_img_unique:
+        fid_out.write(line + '.jpg' + '\n') # add .jpg or not    fid_out.write(line + '.jpg' + '\n')
+
+    print 'there are %d instances in unique image list %s' % (len(list_img_unique), out_listfile)
+
+
+    fid_in.close()
+    fid_out.close()
+
+
+
+
+
+
 
 if __name__ == '__main__':
     # intial variables
+    imglist_replicate = 'devel_imglist.txt'
+    imglist_unique = 'devel_imglist_unique.txt'
 
-    # read ImgEntry in overfeat_dev_results.txt file
-    DevImgs = parse_overfeat_result(SRC_DATA_DIR + 'overfeat_dev_results.txt')
-
-    Num_devImgs = len(DevImgs)
-    print ' There are %d images from overfeat result. ' % Num_devImgs
-    # read wordnet concetps from devel_dict_wn.txt file
-    Imageclef_concepts = parse_imageclef_concepts_wn(SRC_DATA_DIR + 'devel_dict_wn.txt')
-
-    # map the overfeat tags to imageclef tags
-    count = 0
-    mapping_type = [0,1,2,3,4,5]
-    for eachImg in DevImgs:
-        tag_overfeat = eachImg.imgtags
-
-        for item in mapping_type:
-            image_maptags = map_tag_overfeat2imageclef(tag_overfeat, Imageclef_concepts, item)
-            print 'for image %s, using measure %s' % (eachImg.imgname, SIMILARITY_MEASURE[item])
-            sorted_maptags = sort_dict(image_maptags)
-            for eachitem in sorted_maptags:
-                print str(eachitem),
+    generate_unique_imglist(settings.SRC_DATA_DIR+imglist_replicate, settings.SRC_DATA_DIR+imglist_unique)
 
 
-        eachImg.imgmaptags.update(image_maptags)
-        count += 1
 
-        # if 0 == math.fmod(count, 100):
-        print '...finished %d-th image, mapping tag from overfeat to imageclef ...' % count
-
-    # read Image_conceptlists in devel_conceptlists.txt file
-    Image_conceptlists = parse_imageclef_conceptlists(SRC_DATA_DIR + 'devel_conceptlists.txt')
-
-    # now generate the final predict result
-    generate_predict_results(DevImgs, Image_conceptlists, (DST_DATA_DIR + 'devel_predict_results.txt'))
-
-
-    print 'finished predict tags for dev set -:)'
