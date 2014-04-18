@@ -90,6 +90,82 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
     fid.close()
 
 
+def generate_imageclef_baselines(in_dict_file, in_res_file, res_clef_conceptlists, out_dec_file, out_score_file):
+    """
+        function generate_imageclef_baselines produces 2 evaluation txt files from the basedline *.res files (provided by community)
+            for the matlab script eavluation.m used.
+
+        Input:
+            in_dict_file is  the tag dict file contains all tags in dev/test set
+            in_res_file is the *.res file contains the baseline results
+            res_clef_conceptlists is a [[imagenames], [imageconceptlists]] list type, parsed from ***_conceptlists.txt file
+
+        Return:
+             out_dec_file is the fullpath output decision file, only contains 0/1 values
+             out_score_file is the fullpath output score file, contains confidence scores for each tag to each image
+    """
+    fid_dict = open(in_dict_file, 'r')
+    fid_res = open(in_res_file, 'r')
+    fid_dec = open(out_dec_file, 'w')
+    fid_score = open(out_score_file, 'w')
+
+    # get the tag list
+    tag_list = []
+    for line in fid_dict:
+        tag_list.append(line.strip('\n'))
+
+    imgNames = res_clef_conceptlists[0] # a simple list
+    imgConcepts = res_clef_conceptlists[1] # a list contains sub lists
+
+    numTags = len(tag_list)
+    numImages = len(imgNames)
+    # parse the *.res file, put each line in a big list
+    res_list = []
+    for line in fid_res.readlines():
+        content = line.strip('\n').split()
+        image_name = content[0]
+        image_score = content[1::2] #list
+        image_decision = content[2::2] #list
+
+        #add these 3 sub items in list
+        res_list.append([image_name, image_score, image_decision])
+
+
+    decMatrix = np.zeros([numImages, numTags])
+    scoreMatrix = np.zeros([numImages, numTags])
+
+    # now loop to fill the 2 matrix, make sure the image name in res_list is the same order as in imgNames
+    for item_idx in range(len(res_list)):
+        item = res_list[item_idx]
+        image_name = item[0]
+        image_score = item[1] #list
+        image_decision = item[2] #list
+
+        image_concept = imgConcepts[item_idx] # list
+
+        if len(image_concept) != len(image_score) or len(image_concept) != len(image_decision):
+            print 'dimension not matches! image_concept, image_score, image_decision should have same dimension!'
+            return None
+
+        for idx in range(len(image_concept)):
+            concept = image_concept[idx]
+            # find the global index of concept in tag_list
+            concept_idx = tag_list.index(concept)
+
+            scoreMatrix[item_idx][concept_idx] = float(image_score[idx])
+            decMatrix[item_idx][concept_idx] = int(image_decision[idx])
+
+    # now write 2 matrix to output files
+    np.savetxt(fid_score, scoreMatrix, fmt='%f')
+    np.savetxt(fid_dec, decMatrix, fmt='%d')
+
+    fid_dict.close()
+    fid_res.close()
+    fid_dec.close()
+    fid_score.close()
+
+
+
 def generate_imageclef_evalfiles(in_dict_file, in_ImgEntries, \
                                  out_dec_file, out_score_file):
     """
@@ -192,5 +268,3 @@ if __name__ == '__main__':
         (settings.SRC_DATA_DIR+dec_file), (settings.SRC_DATA_DIR+score_file))
 
     print 'finished!'
-
-

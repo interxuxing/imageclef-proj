@@ -10,7 +10,7 @@ import numpy as np
 import re
 
 import imageclef_settings as settings
-
+import copy as cp
 
 # first give some initial configuration about path, etc
 # give some initial configuration
@@ -62,10 +62,14 @@ def select_topK_dict(in_dict, K):
 
     out_dict = {}
     # now fill the topK entries with values to out_dict
-    for item in sorted_list:
-        key = item[0]
-        value = item[1]
-        out_dict[key] = value
+    for idx in range(num1):
+        if idx <= K:
+            item = sorted_list[idx]
+            key = item[0]
+            value = item[1]
+            out_dict[key] = value
+        else:
+            break
 
     return out_dict
 
@@ -416,6 +420,9 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
         map_dict['sunset'] += map_dict['sunset']
         del map_dict['sunset']
 
+    if 0 == map_dict['sunrise/sunset']:
+        del map_dict['sunrise/sunset']
+
     if len(map_dict) == 0:
         print '... ... no map_dict obtained for current image!'
         return -1
@@ -542,6 +549,95 @@ def generate_unique_imglist(in_listfile, out_listfile):
     fid_out.close()
 
 
+
+
+class ClarifaiTagFilter(object):
+    """
+        class TagFilter is a class to map the original tags predicted by Clarifai to the tags used in CLEF.
+            There are mainly two parts of filtering process: (1) transform the tags predicted by Clarifai, which can not be
+                parsed in wordnet, to the tags in CLEF. (2) add some CLEF tags (which are hardly recalled) based on the
+                co-occurrence.
+    """
+    mapping_tag_pairs = {}
+    def __init__(self, in_mapping_file):
+        """
+            when initial a ClarifaiTagFilter object, parse the mapping file, get mapping tag pairs (a dict)
+        """
+        self.mapping_tag_pairs = self.parse_mapping_file(in_mapping_file)
+
+    def parse_mapping_file(self, in_mapping_file):
+        """
+            parse the mapping file
+
+            Input:
+                in_mapping_file
+            Output:
+                a dict structure contains the {'clarifai_tag':'clef_tag', ...} pairs
+        """
+        fid = open(in_mapping_file, 'r')
+        dict_tag_pairs = {}
+        for line in fid.readlines():
+            content = line.strip('\n').split('\t')
+            # put the content[0] (clarifai_tag) and content[1] (clef_tag) to dict
+            clarifai_tag = content[0]
+            clef_tag = content[1]
+            dict_tag_pairs[clarifai_tag] = clef_tag
+
+        fid.close()
+        return dict_tag_pairs
+
+    def filtering_tag(self, ori_tag_dict):
+        """
+            function filtering_tag is to mapping the tags in in_orig_tag_dict based on mapping_tag_pairs,
+                returns a new dict whose keys are in CLEF set
+        """
+        dst_tag_dict = {}
+        for key in ori_tag_dict:
+            ori_value = ori_tag_dict[key]
+            # whether this key is in mapping_tag_pairs
+            try:
+                new_value = self.mapping_tag_pairs[key]
+                # now delete the ori_key and assign new key
+                dst_tag_dict[new_value] = ori_value
+            except KeyError, args:
+                # if this key is not in mapping_tag_pairs, preserve it
+                dst_tag_dict[key] = ori_value
+
+        return dst_tag_dict
+
+    def add_cooccur_tags(self, ori_tag_dict):
+        """
+            add co-occurred tags to the ori_tag_dict, e.g. if ori_tag_dict contains cloud, add 'overcast' with some confidence socre
+
+                for devel set, we consider word pairs (overcast, cloud), (cloudless, sky), (unpaved, road), (underwater, water)
+        """
+        dst_tag_dict =  cp.deepcopy(ori_tag_dict)
+        for key in ori_tag_dict:
+            if key == 'cloud':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (128.0 / 478)
+                # add overcast
+                dst_tag_dict['overcast'] = dst_value
+
+            if key == 'sky':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (79.0 / 194)
+                # add overcast
+                dst_tag_dict['cloudless'] = dst_value
+
+            if key == 'road':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (26.0 / 244)
+                # add overcast
+                dst_tag_dict['unpaved'] = dst_value
+
+            if key == 'water':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (24.0 / 288)
+                # add overcast
+                dst_tag_dict['underwater'] = dst_value
+
+        return dst_tag_dict
 
 
 
