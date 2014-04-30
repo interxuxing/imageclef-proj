@@ -7,7 +7,7 @@ __author__ = 'xuxing'
 
 # first give some initial configuration about path, etc
 # give some initial configuration
-ENV = 2 # 1:laptop  2:desktop
+ENV = 1 # 1:laptop  2:desktop
 SET = 1 # 1:develop 2:test
 
 

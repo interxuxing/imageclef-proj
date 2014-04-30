@@ -37,7 +37,7 @@ class ImgEntry:
 
 from operator import itemgetter
 def sort_dict(d, reverse=False):
-    # sort the dict based on values, for descending order
+    # sort the dict based on values, for descending order, return a list with item [(key, value), ..., (key, value)]
     return sorted(d.iteritems(), key=itemgetter(1), reverse=True)
 
 
@@ -57,7 +57,7 @@ def select_topK_dict(in_dict, K):
     num1 = len(sorted_list)
 
     if num1 < K:
-        print 'number of entries in in_dict should larger than %d, not it is %d' % (K, num1)
+        print 'number of entries in in_dict should be larger than %d, but it is %d' % (K, num1)
         return None
 
     out_dict = {}
@@ -70,6 +70,44 @@ def select_topK_dict(in_dict, K):
             out_dict[key] = value
         else:
             break
+
+    return out_dict
+
+def select_dominant_topK_dict(in_dict, sigma=0.9):
+    """
+        function select_dominant_topK can be called after function select_topK_dict
+            since we first select topK from 10 tags predicted by Clarifai,
+                we then further select dominant tags from the top-K tags based on the threshold value sigma (default 0.9)
+
+        Input:
+            in_dict, a non-order dict structure of K (key, value) pairs
+            sigma, a threshold value, default 0.9
+
+        Return:
+            out_dict: a dict with dominant entries in in_dict, number of items should be no larger than K
+    """
+    sorted_list = sort_dict(in_dict, reverse=True) # descending order
+    out_dict = {}
+
+    # get only the scores
+    scores = []
+    for item1, item2 in sorted_list:
+        scores.append(item2)
+
+    # get dominant indice where cumsum greater than sigma
+    array_scores = np.array(scores)
+    cum = np.cumsum(array_scores)
+    cum_norm = cum / cum[-1]
+    flag = cum_norm <= sigma
+    indice = np.sum(flag)
+    if indice == 0: # when 1st value is large enough, flag are all false, we need to preserve the 1st one
+        indice = 1
+    # then copy the 0~indices from in_dict to out_dict
+    for idx in range(indice):
+        item = sorted_list[idx]
+        key = item[0]
+        value = item[1]
+        out_dict[key] = value
 
     return out_dict
 
@@ -183,8 +221,8 @@ def parse_clarifai_result(res_file, step=10):
     for line in fid.readlines():
         # the first 2 bytes in 1st line of 'clarifai_predict_results.txt' need to be removed!
         line_count += 1
-        if line_count == 1:
-            line = line[3:]
+        # if line_count == 1:   # this is for utf-8 coding file, if ascii coding, no need!
+        #     line = line[3:]
 
         if isNewImage:
             # create a new image instance
@@ -412,16 +450,16 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
             map_dict[tag_imageclef] = pred_sim_score[i]
             # map_dict[tag_imageclef] = tag_overfeat.values()[i]
     # process for sunrise and sunset tags, merge it in map_dict
-    map_dict['sunrise/sunset'] = 0
-    if 'sunrise' in map_dict.keys():
-        map_dict['sunrise/sunset'] += map_dict['sunrise']
-        del map_dict['sunrise']
-    if 'sunset' in map_dict.keys():
-        map_dict['sunset'] += map_dict['sunset']
-        del map_dict['sunset']
-
-    if 0 == map_dict['sunrise/sunset']:
-        del map_dict['sunrise/sunset']
+    # map_dict['sunrise/sunset'] = 0
+    # if 'sunrise' in map_dict.keys():
+    #     map_dict['sunrise/sunset'] += map_dict['sunrise']
+    #     del map_dict['sunrise']
+    # if 'sunset' in map_dict.keys():
+    #     map_dict['sunset'] += map_dict['sunset']
+    #     del map_dict['sunset']
+    #
+    # if 0 == map_dict['sunrise/sunset']:
+    #     del map_dict['sunrise/sunset']
 
     if len(map_dict) == 0:
         print '... ... no map_dict obtained for current image!'
@@ -579,9 +617,12 @@ class ClarifaiTagFilter(object):
         for line in fid.readlines():
             content = line.strip('\n').split('\t')
             # put the content[0] (clarifai_tag) and content[1] (clef_tag) to dict
-            clarifai_tag = content[0]
-            clef_tag = content[1]
-            dict_tag_pairs[clarifai_tag] = clef_tag
+            try:
+                clarifai_tag = content[0]
+                clef_tag = content[1]
+                dict_tag_pairs[clarifai_tag] = clef_tag
+            except IndexError, err:
+                print 'Index Error'
 
         fid.close()
         return dict_tag_pairs
@@ -592,6 +633,16 @@ class ClarifaiTagFilter(object):
                 returns a new dict whose keys are in CLEF set
         """
         dst_tag_dict = {}
+
+        # first process the condition for tricycle
+        list_keys = ori_tag_dict.keys()
+        if 'kid' in  list_keys and 'bike' in list_keys:
+            dst_value = max(ori_tag_dict['kid'], ori_tag_dict['bike'])
+            dst_tag_dict['tricycle'] = dst_value
+            # delete the item bike
+            del ori_tag_dict['bike']
+
+        # for mapping tag pairs
         for key in ori_tag_dict:
             ori_value = ori_tag_dict[key]
             # whether this key is in mapping_tag_pairs
@@ -615,27 +666,78 @@ class ClarifaiTagFilter(object):
         for key in ori_tag_dict:
             if key == 'cloud':
                 ori_value = ori_tag_dict[key]
-                dst_value = ori_value * (128.0 / 478)
+                dst_value = ori_value * (128.0 / 478.0)
                 # add overcast
                 dst_tag_dict['overcast'] = dst_value
 
             if key == 'sky':
                 ori_value = ori_tag_dict[key]
-                dst_value = ori_value * (79.0 / 194)
-                # add overcast
+                dst_value = ori_value * (79.0 / 194.0)
+                # add cloudless
                 dst_tag_dict['cloudless'] = dst_value
 
             if key == 'road':
                 ori_value = ori_tag_dict[key]
-                dst_value = ori_value * (26.0 / 244)
-                # add overcast
+                dst_value = ori_value * (26.0 / 244.0)
+                # add unpaved
                 dst_tag_dict['unpaved'] = dst_value
 
             if key == 'water':
                 ori_value = ori_tag_dict[key]
-                dst_value = ori_value * (24.0 / 288)
-                # add overcast
+                dst_value = ori_value * (24.0 / 288.0)
+                # add underwater
                 dst_tag_dict['underwater'] = dst_value
+
+            if key == 'train':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value / 2.0
+                # add vehicle
+                dst_tag_dict['vehicle'] = dst_value
+
+            if key == 'boat':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (118.0 / 288.0)
+                # add water
+                dst_tag_dict['water'] = dst_value
+
+            # for canidae
+            if key in ['wolf', 'fox']:
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (1.0 / 9.0)
+                # add canidae
+                dst_tag_dict['canidae'] = dst_value
+
+            # for tubers
+            if key == 'yam':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (1.0 / 5.0)
+                # add tubers
+                dst_tag_dict['tubers'] = dst_value
+
+            # for equidae
+            if key in ['horse', 'donkey', 'zebra']:
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value * (1.0 / 9.0)
+                # add equidae
+                dst_tag_dict['equidae'] = dst_value
+
+            if key == 'asparagus':
+                ori_value = ori_tag_dict[key]
+                dst_value = ori_value  * (1.0 / 9.0)
+                # add lettuce
+                dst_tag_dict['lettuce'] = dst_value
+
+        # for pair-wise tags condition, if 2 tags occurs, add the 3rd tag
+        list_keys = ori_tag_dict.keys()
+        # if fruit and red co-occur, add apple
+        if 'fruit' in list_keys and 'red' in list_keys:
+            dst_value = max(ori_tag_dict['fruit'], ori_tag_dict['red'])
+            dst_tag_dict['apple'] = dst_value
+        # for bottle condition
+        if ('drink' in list_keys and 'glass' in list_keys) or \
+                ('drink' in list_keys and 'water' in list_keys):
+            dst_value = ori_tag_dict['drink'] * (1.0 / 2.0)
+            dst_tag_dict['bottle'] = dst_value
 
         return dst_tag_dict
 
