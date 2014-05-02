@@ -57,29 +57,30 @@ if __name__ == '__main__':
             tag_clarifai_K2 = tagFilter.add_cooccur_tags(tag_clarifai_K1)
             for item in mapping_type:
                 image_maptags = fileparser.map_tag_overfeat2imageclef(tag_clarifai_K2, Imageclef_concepts, item)
+                image_maptags_K0 = fileparser.select_dominant_topK_dict(image_maptags, 0.95)
                 print '... for %d-th image %s, using measure %s' % (count, eachImg.imgname, settings.SIMILARITY_MEASURE[item])
                 try:
-                    sorted_maptags = fileparser.sort_dict(image_maptags)
+                    sorted_maptags = fileparser.sort_dict(image_maptags_K0)
                 except Exception, er:
                     print 'meet error!'
                 for eachitem in sorted_maptags:
                     print str(eachitem),
             print ''
 
-            eachImg.imgmaptags.update(image_maptags)
+            eachImg.imgmaptags.update(image_maptags_K0)
 
 
             # if 0 == math.fmod(count, 100):
             # print '...finished %d-th image, mapping tag from overfeat to imageclef ...' % count
 
         # now generate the final predict result
-        pred_file = ('clarifai_test_predict_results_K%d.txt' % eachK)
+        pred_file = ('clef_test_predict_results_K%d.txt' % eachK)
         fileparser.generate_predict_results(newDevImgs, Image_conceptlists, \
                                             (settings.DST_DATA_DIR + pred_file))
 
         # generate the adaptive files for evaluation used
-        dec_file = ('clarifai_test_predict_decision_K%d.txt' % eachK )
-        score_file = ('clarifai_test_predict_scores_K%d.txt' % eachK )
+        dec_file = ('clef_test_predict_decision_K%d.txt' % eachK )
+        score_file = ('clef_test_predict_scores_K%d.txt' % eachK )
 
         evaluation.generate_imageclef_evalfiles((settings.SRC_DATA_DIR+'test_dict.txt'), newDevImgs, \
             (settings.SRC_DATA_DIR+dec_file), (settings.SRC_DATA_DIR+score_file))
