@@ -48,8 +48,8 @@ if __name__ == '__main__':
     # map the overfeat tags to imageclef tags
 
     mapping_type = [0]
-    K = [2,3,4,6,7,8,9]
-    # K = [6]
+    # K = [2,3,4,6,7,8,9]
+    K = [6]
     for eachK in K:
         print 'predict with K %d' % eachK
         count = 0
@@ -86,13 +86,13 @@ if __name__ == '__main__':
         # f.close()
 
         # now generate the final predict result
-        pred_file = ('clarifai_devel_predict_results_K%d.txt' % eachK)
+        pred_file = ('clef_devel_predict_results_K%d.txt' % eachK)
         fileparser.generate_predict_results(newDevImgs, Image_conceptlists, \
                                             (settings.DST_DATA_DIR + pred_file))
 
         # generate the adaptive files for evaluation used
-        dec_file = ('clarifai_devel_predict_decision_K%d.txt' % eachK )
-        score_file = ('clarifai_devel_predict_scores_K%d.txt' % eachK )
+        dec_file = ('clef_devel_predict_decision_K%d.txt' % eachK )
+        score_file = ('clef_devel_predict_scores_K%d.txt' % eachK )
 
         evaluation.generate_imageclef_evalfiles((settings.SRC_DATA_DIR+'devel_dict.txt'), newDevImgs, \
             (settings.SRC_DATA_DIR+dec_file), (settings.SRC_DATA_DIR+score_file))

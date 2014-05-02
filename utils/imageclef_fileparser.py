@@ -40,6 +40,13 @@ def sort_dict(d, reverse=False):
     # sort the dict based on values, for descending order, return a list with item [(key, value), ..., (key, value)]
     return sorted(d.iteritems(), key=itemgetter(1), reverse=True)
 
+def remove_zero_value_dict(d):
+    # remove the keys with values equal zero in d, and return a new_dict
+    new_dict = {}
+    for key in d:
+        if d[key] != 0:
+            new_dict[key] = d[key]
+    return new_dict
 
 def select_topK_dict(in_dict, K):
     """
@@ -449,17 +456,18 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
         else:
             map_dict[tag_imageclef] = pred_sim_score[i]
             # map_dict[tag_imageclef] = tag_overfeat.values()[i]
+
     # process for sunrise and sunset tags, merge it in map_dict
-    # map_dict['sunrise/sunset'] = 0
-    # if 'sunrise' in map_dict.keys():
-    #     map_dict['sunrise/sunset'] += map_dict['sunrise']
-    #     del map_dict['sunrise']
-    # if 'sunset' in map_dict.keys():
-    #     map_dict['sunset'] += map_dict['sunset']
-    #     del map_dict['sunset']
-    #
-    # if 0 == map_dict['sunrise/sunset']:
-    #     del map_dict['sunrise/sunset']
+    map_dict['sunrise/sunset'] = 0
+    if 'sunrise' in map_dict.keys():
+        map_dict['sunrise/sunset'] += map_dict['sunrise']
+        del map_dict['sunrise']
+    if 'sunset' in map_dict.keys():
+        map_dict['sunrise/sunset'] += map_dict['sunset']
+        del map_dict['sunset']
+
+    if 0 == map_dict['sunrise/sunset']:
+        del map_dict['sunrise/sunset']
 
     if len(map_dict) == 0:
         print '... ... no map_dict obtained for current image!'
@@ -522,13 +530,42 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
 
     # for each image in res_clef_conceptlists, we search it in res_map_tags
     #   if the concept of conceptlists exists in res_map_tags, give score and mask to it
-    for newEntry in res_ImgEntries:
+    #   here we need to ensure that entry in res_ImgEntries and imgNames has the same order
+    # for newEntry in res_ImgEntries:
+    for entryIdx in range(len(res_ImgEntries)):
+        newEntry = res_ImgEntries[entryIdx]
         # each item is a dictionary type
         image_name = newEntry.imgname # a str
         image_map_tags = newEntry.imgmaptags # a dict
 
+        if image_name != imgNames[entryIdx]:
+            print 'for entry %s in res_ImgEntries is not matched with %s in res_clef_conceptlists! ' % (image_name, imgNames[entryIdx])
+            raise IOError, 'error with name matching'
 
         outputformatList = []
+        # if this image exists, then output it using standard format
+        this_imgConcepts = imgConcepts[entryIdx]
+        outputformatList.append(image_name)
+
+        # loop for the concepts for this image
+        for concept_name in this_imgConcepts:
+            score_for_concept = 0
+            decision_for_concept = 0
+            if concept_name in image_map_tags.keys():
+                score_for_concept = image_map_tags[concept_name]
+                decision_for_concept = 1
+
+            # set the output format
+            this_concept_str = ('%f %d' % (score_for_concept, decision_for_concept))
+            outputformatList.append(this_concept_str)
+
+        # now merge the outputformatList to get a final output string
+        outputformatStr = ' '.join(outputformatList)
+
+        # write it to file
+        fid.write(outputformatStr + '\n')
+
+        """
         # if this image exists, then output it using standard format
         if image_name in imgNames:
             this_imgIdx = imgNames.index(image_name)
@@ -552,7 +589,7 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
 
             # write it to file
             fid.write(outputformatStr + '\n')
-
+        """
     fid.close()
 
 
@@ -649,7 +686,7 @@ class ClarifaiTagFilter(object):
             try:
                 new_value = self.mapping_tag_pairs[key]
                 # now delete the ori_key and assign new key
-                dst_tag_dict[new_value] = ori_value
+                dst_tag_dict[new_value] += ori_value
             except KeyError, args:
                 # if this key is not in mapping_tag_pairs, preserve it
                 dst_tag_dict[key] = ori_value
@@ -663,6 +700,13 @@ class ClarifaiTagFilter(object):
                 for devel set, we consider word pairs (overcast, cloud), (cloudless, sky), (unpaved, road), (underwater, water)
         """
         dst_tag_dict =  cp.deepcopy(ori_tag_dict)
+        # we need to process the following special tags
+        newKeys = ['overcast', 'cloudless', 'unpaved', 'underwater', 'vehicle', 'water', 'canidae', \
+                   'tubers', 'equidae', 'lettuce']
+        for key in newKeys:
+            dst_tag_dict[key] = 0
+
+        # if one tag occurs, make the other tag occur
         for key in ori_tag_dict:
             if key == 'cloud':
                 ori_value = ori_tag_dict[key]
@@ -688,9 +732,9 @@ class ClarifaiTagFilter(object):
                 # add underwater
                 dst_tag_dict['underwater'] = dst_value
 
-            if key == 'train':
+            if key == ['train', 'boat', 'airplane']:
                 ori_value = ori_tag_dict[key]
-                dst_value = ori_value / 2.0
+                dst_value = ori_value / 5.0
                 # add vehicle
                 dst_tag_dict['vehicle'] = dst_value
 
@@ -726,6 +770,9 @@ class ClarifaiTagFilter(object):
                 dst_value = ori_value  * (1.0 / 9.0)
                 # add lettuce
                 dst_tag_dict['lettuce'] = dst_value
+
+        # now remove zero-value keys
+        dst_tag_dict = remove_zero_value_dict(dst_tag_dict)
 
         # for pair-wise tags condition, if 2 tags occurs, add the 3rd tag
         list_keys = ori_tag_dict.keys()

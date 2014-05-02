@@ -14,8 +14,8 @@ data_dir = '../data/test_result'
 
 for K = 6
     fprintf('For K = %d \n', K);
-    file_predict_decision = sprintf('clarifai_test_predict_decision_K%d.txt',K);
-    file_predict_score = sprintf('clarifai_test_predict_scores_K%d.txt', K);
+    file_predict_decision = sprintf('clef_test_predict_decision_K%d.txt',K);
+    file_predict_score = sprintf('clef_test_predict_scores_K%d.txt', K);
     predict_decision = logical(dlmread(fullfile(data_dir, file_predict_decision)));
     predict_score = dlmread(fullfile(data_dir, file_predict_score));
     
