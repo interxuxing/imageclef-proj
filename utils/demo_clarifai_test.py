@@ -61,7 +61,10 @@ if __name__ == '__main__':
                 print '... for %d-th image %s, using measure %s' % (count, eachImg.imgname, settings.SIMILARITY_MEASURE[item])
                 try:
                     sorted_maptags = fileparser.sort_dict(image_maptags_K0)
+<<<<<<< HEAD
 
+=======
+>>>>>>> d05bcdb6551ff438338dbcde3e69f55d98bc29dd
                 except Exception, er:
                     print 'meet error!'
                 for eachitem in sorted_maptags:
