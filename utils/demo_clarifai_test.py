@@ -62,11 +62,15 @@ if __name__ == '__main__':
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     sorted_maptags = fileparser.sort_dict(image_maptags_K0)
 <<<<<<< HEAD
 
 =======
 >>>>>>> d05bcdb6551ff438338dbcde3e69f55d98bc29dd
+=======
+                    sorted_maptags = fileparser.sort_dict(image_maptags)
+>>>>>>> parent of d05bcdb... version 0.131
 =======
                     sorted_maptags = fileparser.sort_dict(image_maptags)
 >>>>>>> parent of d05bcdb... version 0.131
