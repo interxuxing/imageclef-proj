@@ -11,7 +11,7 @@ ENV = 1 # 1:laptop  2:desktop
 SET = 1 # 1:develop 2:test
 
 
-if ENV == 1: # laptop
+if ENV == 2: # laptop
     SRC_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\'
     if SET == 1:
         DST_DATA_DIR = 'C:\\workspace\\my tools\\git code\\imageclef-proj\\data\\devel_result\\'
