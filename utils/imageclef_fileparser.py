@@ -456,18 +456,17 @@ def map_tag_overfeat2imageclef(tag_overfeat, concepts_imageclef, mapping_type=0)
         else:
             map_dict[tag_imageclef] = pred_sim_score[i]
             # map_dict[tag_imageclef] = tag_overfeat.values()[i]
-
     # process for sunrise and sunset tags, merge it in map_dict
-    map_dict['sunrise/sunset'] = 0
-    if 'sunrise' in map_dict.keys():
-        map_dict['sunrise/sunset'] += map_dict['sunrise']
-        del map_dict['sunrise']
-    if 'sunset' in map_dict.keys():
-        map_dict['sunrise/sunset'] += map_dict['sunset']
-        del map_dict['sunset']
-
-    if 0 == map_dict['sunrise/sunset']:
-        del map_dict['sunrise/sunset']
+    # map_dict['sunrise/sunset'] = 0
+    # if 'sunrise' in map_dict.keys():
+    #     map_dict['sunrise/sunset'] += map_dict['sunrise']
+    #     del map_dict['sunrise']
+    # if 'sunset' in map_dict.keys():
+    #     map_dict['sunset'] += map_dict['sunset']
+    #     del map_dict['sunset']
+    #
+    # if 0 == map_dict['sunrise/sunset']:
+    #     del map_dict['sunrise/sunset']
 
     if len(map_dict) == 0:
         print '... ... no map_dict obtained for current image!'
@@ -530,42 +529,13 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
 
     # for each image in res_clef_conceptlists, we search it in res_map_tags
     #   if the concept of conceptlists exists in res_map_tags, give score and mask to it
-    #   here we need to ensure that entry in res_ImgEntries and imgNames has the same order
-    # for newEntry in res_ImgEntries:
-    for entryIdx in range(len(res_ImgEntries)):
-        newEntry = res_ImgEntries[entryIdx]
+    for newEntry in res_ImgEntries:
         # each item is a dictionary type
         image_name = newEntry.imgname # a str
         image_map_tags = newEntry.imgmaptags # a dict
 
-        if image_name != imgNames[entryIdx]:
-            print 'for entry %s in res_ImgEntries is not matched with %s in res_clef_conceptlists! ' % (image_name, imgNames[entryIdx])
-            raise IOError, 'error with name matching'
 
         outputformatList = []
-        # if this image exists, then output it using standard format
-        this_imgConcepts = imgConcepts[entryIdx]
-        outputformatList.append(image_name)
-
-        # loop for the concepts for this image
-        for concept_name in this_imgConcepts:
-            score_for_concept = 0
-            decision_for_concept = 0
-            if concept_name in image_map_tags.keys():
-                score_for_concept = image_map_tags[concept_name]
-                decision_for_concept = 1
-
-            # set the output format
-            this_concept_str = ('%f %d' % (score_for_concept, decision_for_concept))
-            outputformatList.append(this_concept_str)
-
-        # now merge the outputformatList to get a final output string
-        outputformatStr = ' '.join(outputformatList)
-
-        # write it to file
-        fid.write(outputformatStr + '\n')
-
-        """
         # if this image exists, then output it using standard format
         if image_name in imgNames:
             this_imgIdx = imgNames.index(image_name)
@@ -589,7 +559,7 @@ def generate_predict_results(res_ImgEntries, res_clef_conceptlists, out_predict_
 
             # write it to file
             fid.write(outputformatStr + '\n')
-        """
+
     fid.close()
 
 

@@ -26,8 +26,8 @@ groundtruth_mask = logical(dlmread(fullfile(data_dir, 'devel_groundtruth_tagmask
 
 for K = 6
     fprintf('For K = %d \n', K);
-    file_predict_decision = sprintf('clef_devel_predict_decision_K%d.txt',K);
-    file_predict_score = sprintf('clef_devel_predict_scores_K%d.txt', K);
+    file_predict_decision = sprintf('clarifai_devel_predict_decision_K%d.txt',K);
+    file_predict_score = sprintf('clarifai_devel_predict_scores_K%d.txt', K);
     predict_decision = logical(dlmread(fullfile(data_dir, file_predict_decision)));
     predict_score = dlmread(fullfile(data_dir, file_predict_score));
 
@@ -41,17 +41,17 @@ for K = 6
     fprintf('For AP, mAP %f \n', mAP);
     fprintf('finished! \n\n');
     
-%     [new_predict_decision, new_predict_score] = select_dominant_topK(predict_decision, predict_score, 0.92);
-%     [ new_sampRES, new_cnptRES, new_AP ] = evalannotat(groundtruth_decision, new_predict_decision, ...
-%         new_predict_score, groundtruth_mask);
-%     mean_sampRES = mean(new_sampRES);
-%     mean_cnptRES = mean(new_cnptRES);
-%     mAP = mean(new_AP);
-%     fprintf('After the select dominant tags in each sample: \n')
-%     fprintf('For sampRES, P %f, R %f, F1 %f \n', mean_sampRES(1), mean_sampRES(2), mean_sampRES(3));
-%     fprintf('For cnptRES, P %f, R %f, F1 %f \n', mean_cnptRES(1), mean_cnptRES(2), mean_cnptRES(3));
-%     fprintf('For AP, mAP %f \n', mAP);
-%     fprintf('finished! \n\n');
+    [new_predict_decision, new_predict_score] = select_dominant_topK(predict_decision, predict_score, 0.92);
+    [ new_sampRES, new_cnptRES, new_AP ] = evalannotat(groundtruth_decision, new_predict_decision, ...
+        new_predict_score, groundtruth_mask);
+    mean_sampRES = mean(new_sampRES);
+    mean_cnptRES = mean(new_cnptRES);
+    mAP = mean(new_AP);
+    fprintf('After the select dominant tags in each sample: \n')
+    fprintf('For sampRES, P %f, R %f, F1 %f \n', mean_sampRES(1), mean_sampRES(2), mean_sampRES(3));
+    fprintf('For cnptRES, P %f, R %f, F1 %f \n', mean_cnptRES(1), mean_cnptRES(2), mean_cnptRES(3));
+    fprintf('For AP, mAP %f \n', mAP);
+    fprintf('finished! \n\n');
 end
 
 
